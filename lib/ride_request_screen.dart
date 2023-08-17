@@ -28,16 +28,35 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
       appBar: AppBar(
         title: Text('Ride Request'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => UserProfileScreen(user: user)),
               );
             },
-          )
+            child: Hero(
+              tag: 'profile',
+              child: Padding(
+                padding: EdgeInsets.all(7),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(user.profileImageUrl),
+                ),
+              ),
+            ),
+          ),
+          // IconButton(
+          //   icon: const Icon(Icons.person),
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => UserProfileScreen(user: user)),
+          //     );
+          //   },
+          // )
         ],
       ),
       body: Padding(
@@ -85,7 +104,9 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               'Vehicle Type',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16,),
+            SizedBox(
+              height: 16,
+            ),
             DropdownButton<String>(
               value: selectedVehicle,
               onChanged: (newValue) {
@@ -121,7 +142,10 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               onPressed: () {
                 _submitRideRequest();
               },
-              child: Text('Request Ride', style: TextStyle(color: Colors.white, fontSize: 22),),
+              child: Text(
+                'Request Ride',
+                style: TextStyle(color: Colors.white, fontSize: 22),
+              ),
             ),
           ],
         ),

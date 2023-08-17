@@ -87,9 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ride App'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Ride App'),
+      // ),
       body: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
@@ -107,30 +107,83 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
+                  FloatingActionButton.extended(
                     onPressed: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignInScreen()),
-                      );
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 500),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return SignInScreen();
+                            },
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.decelerate;
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+                              return SlideTransition(
+                                  position: offsetAnimation, child: child);
+                            },
+                          ));
                     },
-                    style: style,
-                    child: Text('Sign In',
-                        style: TextStyle(color: Colors.white, fontSize: 28)),
+                    label: const Text(
+                      'Sign In',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    icon: const Icon(Icons.login),
+                    elevation: 15,
+                    heroTag: 'sign-in',
+                    // hoverElevation: 10,
+                    // splashColor: Colors.white,
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
+                  const SizedBox(height: 20),
+                  FloatingActionButton.extended(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SignUpScreen()),
                       );
                     },
-                    style: style,
-                    child: const Text('Sign Up',
-                        style: TextStyle(color: Colors.white, fontSize: 28)),
+                    label: const Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    icon: const Icon(Icons.assignment_ind),
+                    elevation: 15,
+                    heroTag: 'sign-up',
+                    // splashColor: Colors.white,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(
+                    height: 20,
+                  )
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => SignInScreen()),
+                  //     );
+                  //   },
+                  //   style: style,
+                  //   child: Text('Sign In',
+                  //       style: TextStyle(color: Colors.white, fontSize: 28)),
+                  // ),
+                  // SizedBox(height: 20),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  //     );
+                  //   },
+                  //   style: style,
+                  //   child: const Text('Sign Up',
+                  //       style: TextStyle(color: Colors.white, fontSize: 28)),
+                  // ),
+                  // SizedBox(height: 20),
                   // ElevatedButton(
                   //   onPressed: () {
                   //     Navigator.push(

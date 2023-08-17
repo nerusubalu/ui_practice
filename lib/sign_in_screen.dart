@@ -19,10 +19,11 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Sign In'),
-        ),
-        body: Stack(fit: StackFit.expand, children: [
+      // appBar: AppBar(
+      //   title: Text('Sign In'),
+      // ),
+      body: SafeArea(
+        child: Stack(fit: StackFit.expand, children: [
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -110,20 +111,40 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                     SizedBox(height: 16),
-                    ElevatedButton(
+                    FloatingActionButton.extended(
                       onPressed: () {
                         _handleSignIn();
                       },
-                      style: style,
-                      child: Text('Sign In',
-                          style: TextStyle(color: Colors.white, fontSize: 28)),
+                      label: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      icon: const Icon(Icons.login),
+                      heroTag: 'sign-in',
                     ),
                   ],
                 ),
               ),
             ),
           )
-        ]));
+        ]),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        label: const Text(
+          'back ',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        icon: const Icon(Icons.arrow_back_rounded),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+    );
   }
 
   bool isValidEmail(String email) {
@@ -165,7 +186,8 @@ class _SignInScreenState extends State<SignInScreen> {
     String password = _passwordController.text;
 
     var headers = {'Content-Type': 'application/json'};
-    var body = json.encode({"username": email, "password": password});
+    var body = json
+        .encode({"username": email, "password": password, "method": "sign-in"});
 
     final response = await http.post(
       Uri.parse(

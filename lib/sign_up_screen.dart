@@ -25,9 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Sign Up'),
+      // ),
       body: Stack(fit: StackFit.expand, children: [
         Positioned.fill(
           child: Container(
@@ -175,22 +175,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
                         },
                       ),
-                      ElevatedButton(
+                      FloatingActionButton.extended(
                         onPressed: () {
                           _handleSignUp();
                         },
-                        style: style,
-                        child: Text(
+                        label: Text(
                           'Sign Up',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          style: TextStyle(fontSize: 18,),
                         ),
+                        icon: const Icon(Icons.assignment_ind),
+                        heroTag: 'sign-up',
                       ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     _handleSignUp();
+                      //   },
+                      //   style: style,
+                      //   child: Text(
+                      //     'Sign Up',
+                      //     style: TextStyle(fontSize: 18, color: Colors.white),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
               ),
         ),
       ]),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        label: const Text(
+          'back ',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        icon: const Icon(Icons.arrow_back_rounded),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
     );
   }
 
@@ -263,7 +287,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "username": email,
       "password": password,
       'name': name,
-      'phone': phone
+      'phone': phone,
+      'method': 'sign-in'
     });
 
     final response = await http.post(

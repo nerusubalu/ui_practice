@@ -70,9 +70,12 @@ class UserProfileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 150,
-              backgroundImage: NetworkImage(user.profileImageUrl),
+            Hero(
+              tag: 'profile',
+              child: CircleAvatar(
+                radius: 150,
+                backgroundImage: NetworkImage(user.profileImageUrl),
+              ),
             ),
             SizedBox(height: 16),
             Divider(color: shrineBrown600, thickness: 2),
@@ -102,10 +105,12 @@ class UserProfileScreen extends StatelessWidget {
                 _removeData(false);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MyHomePage(title: 'Ride App')),
+                  MaterialPageRoute(
+                      builder: (context) => MyHomePage(title: 'Ride App')),
                 );
               },
-              child: const Text('Sign Out', style: TextStyle(fontSize: 32, color: Colors.white)),
+              child: const Text('Sign Out',
+                  style: TextStyle(fontSize: 32, color: Colors.white)),
             ),
           ],
         ),
