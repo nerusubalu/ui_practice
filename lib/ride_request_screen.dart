@@ -7,13 +7,30 @@ class RideRequestScreen extends StatefulWidget {
   _RideRequestScreenState createState() => _RideRequestScreenState();
 }
 
+class VehicleOption {
+  final String name;
+  final double price;
+  final String iconAsset;
+
+  VehicleOption(
+      {required this.name, required this.price, required this.iconAsset});
+}
+
 class _RideRequestScreenState extends State<RideRequestScreen> {
   String pickupLocation = '';
   String dropOffLocation = '';
   String selectedVehicle = 'Standard';
   bool isSharingLocation = false;
 
-  List<String> vehicleOptions = ['Standard', 'SUV', 'Luxury'];
+  final List<VehicleOption> vehicleOptions = [
+    VehicleOption(
+        name: 'Rickshaw', price: 5.0, iconAsset: 'assets/rickshaw.png'),
+    VehicleOption(name: 'Micro Car', price: 10.0, iconAsset: 'assets/car.png'),
+    VehicleOption(name: 'Sedan', price: 15.0, iconAsset: 'assets/sedan.png'),
+    VehicleOption(name: 'SUV', price: 20.0, iconAsset: 'assets/suv.png'),
+  ];
+
+  // List<String> vehicleOptions = ['Standard', 'SUV', 'Luxury'];
 
   final UserProfile user = UserProfile(
     name: 'John Doe',
@@ -107,20 +124,29 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
             SizedBox(
               height: 16,
             ),
-            DropdownButton<String>(
-              value: selectedVehicle,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedVehicle = newValue!;
-                });
-              },
-              items: vehicleOptions
-                  .map<DropdownMenuItem<String>>((String vehicle) {
-                return DropdownMenuItem<String>(
-                  value: vehicle,
-                  child: Text(vehicle),
-                );
-              }).toList(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: vehicleOptions.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: ImageIcon(
+                      AssetImage(vehicleOptions[index].iconAsset),
+                      size: 80,
+                    ),
+                    title: Text(
+                      vehicleOptions[index].name,
+                      style: TextStyle(fontSize: 22),
+                    ),
+                    subtitle: Text(
+                      'Price: Rs.${vehicleOptions[index].price.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onTap: () {
+                      _showConfirmationDialog(context, vehicleOptions[index]);
+                    },
+                  );
+                },
+              ),
             ),
             SizedBox(height: 16),
             Row(
@@ -150,6 +176,34 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showConfirmationDialog(
+      BuildContext context, VehicleOption selectedOption) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm Vehicle Selection'),
+          content: Text(
+              'You have selected ${selectedOption.name}. Price: \$${selectedOption.price.toStringAsFixed(2)}'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
+      },
     );
   }
 
