@@ -36,8 +36,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_bloc: ^8.1.3
-  http: ^1.1.0
+  http: any
   shared_preferences: ^2.2.0
+  flutter_google_places_hoc081098: any
+  google_api_headers: any
+  google_maps_webservice: any
+  google_maps_flutter: any
 
 dev_dependencies:
   flutter_test:
