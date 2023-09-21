@@ -42,6 +42,8 @@ dependencies:
   google_api_headers: any
   google_maps_webservice: any
   google_maps_flutter: any
+  location: any
+  geocoding: any
 
 dev_dependencies:
   flutter_test:
