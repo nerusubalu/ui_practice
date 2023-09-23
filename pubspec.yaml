@@ -46,6 +46,7 @@ dependencies:
   geocoding: any
   url_launcher: any
   permission_handler: any
+  flutter_polyline_points: any
 
 dev_dependencies:
   flutter_test:
