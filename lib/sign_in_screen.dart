@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_practice/ride_request_screen.dart';
-import 'package:ui_practice/ui_elements.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -22,8 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
       // appBar: AppBar(
       //   title: Text('Sign In'),
       // ),
-      body: SafeArea(
-        child: Stack(fit: StackFit.expand, children: [
+      body: Stack(fit: StackFit.expand, children: [
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -113,7 +111,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(height: 16),
                     FloatingActionButton.extended(
                       onPressed: () {
-                        _handleSignIn();
+                        if (_handleSignIn() == true){
+                        }
                       },
                       label: Text(
                         'Sign In',
@@ -130,7 +129,6 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           )
         ]),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pop(context);
@@ -181,7 +179,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return null; // No error
   }
 
-  Future<void> _handleSignIn() async {
+  Future<bool> _handleSignIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
@@ -207,13 +205,16 @@ class _SignInScreenState extends State<SignInScreen> {
           context,
           MaterialPageRoute(builder: (context) => RideRequestScreen()),
         );
+        return true;
       } else {
         // Handle authentication failure
         print('Authentication failed');
+        return false;
       }
     } else {
       // Handle API call failure
       print('Failed to authenticate');
+      return false;
     }
   }
 

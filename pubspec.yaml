@@ -44,6 +44,8 @@ dependencies:
   google_maps_flutter: any
   location: any
   geocoding: any
+  url_launcher: any
+  permission_handler: any
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_practice/support.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,6 +58,16 @@ class RideHistory extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ride History'),
+        leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios),
+        onPressed: () {
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => RideHistory()),
+        // );
+        Navigator.of(context).pop();
+        },
+      ),
       ),
       body: ListView.builder(
         itemCount: rides.length,
@@ -128,7 +139,9 @@ class RideHistory extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -148,10 +161,30 @@ class RideHistory extends StatelessWidget {
                         ),
                       ],
                     ),
-                    // Text('Duration: ${rides[index].rideDuration}'),
-                    // Text('Start Time: ${rides[index].startTime}'),
-                    // Text('End Time: ${rides[index].endTime}'),
-                    // Text('Distance: ${rides[index].distance}'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FilledButton.tonalIcon(
+                            onPressed: () {},
+                            icon: Icon(Icons.visibility, size: 20),
+                            label:
+                            Text("View", style: TextStyle(fontSize: 20))),
+                        FilledButton.tonalIcon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SupportPage()),
+                              );
+                            },
+                            icon: Icon(Icons.help, size: 20),
+                            label:
+                                Text("Help", style: TextStyle(fontSize: 20))),
+                      ],
+                    ),
                   ],
                 ),
               ),

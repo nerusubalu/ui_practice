@@ -51,6 +51,10 @@
     <string>Your location is used to provide better services</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Your location is used to provide better services</string>
-
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>http</string>
+      <string>https</string>
+    </array>
 </dict>
 </plist>

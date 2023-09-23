@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_practice/ride_history.dart';
+import 'package:ui_practice/support.dart';
 
 import 'main.dart';
 
@@ -30,7 +31,7 @@ class MyDrawer extends StatelessWidget {
             title: Text('Ride History'),
             onTap: () {
               // Navigate to the Home Screen
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => RideHistory()),
@@ -50,7 +51,11 @@ class MyDrawer extends StatelessWidget {
             title: Text('About'),
             onTap: () {
               // Navigate to the About Screen or perform any other action
-              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SupportPage()),
+              );
             },
           ),
           ListTile(
@@ -84,7 +89,7 @@ class MyDrawer extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => MyHomePage(title: 'Ride App')),
