@@ -110,7 +110,7 @@ class UserProfileScreen extends StatelessWidget {
                 );
               },
               child: const Text('Sign Out',
-                  style: TextStyle(fontSize: 32, color: Colors.white)),
+                  style: TextStyle(fontSize: 32, color: Colors.black)),
             ),
           ],
         ),

@@ -8,8 +8,8 @@ import 'package:ui_practice/custom_drawer.dart';
 import 'package:google_maps_webservice/directions.dart' as directionspkg;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
-final directions = directionspkg.GoogleMapsDirections(apiKey: 'AIzaSyBKCOVTBJuaYswfKPs0I8WbQxhb_1eKHS8');
-
+final directions = directionspkg.GoogleMapsDirections(
+    apiKey: 'AIzaSyBKCOVTBJuaYswfKPs0I8WbQxhb_1eKHS8');
 
 class RideRequestScreen extends StatefulWidget {
   @override
@@ -87,14 +87,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
 
   Future<void> getLocationDescription(LatLng location) async {
     try {
-      final List<geocoding.Placemark> placemarks =
-      await geocoding.placemarkFromCoordinates(location.latitude, location.longitude);
+      final List<geocoding.Placemark> placemarks = await geocoding
+          .placemarkFromCoordinates(location.latitude, location.longitude);
 
       if (placemarks.isNotEmpty) {
         final geocoding.Placemark placemark = placemarks[0];
         final String address =
             '${placemark.street}, ${placemark.locality}, ${placemark.country}';
-        currentLocationDescription= address;
+        currentLocationDescription = address;
       } else {
         print('Location not found');
       }
@@ -102,8 +102,6 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
       print('Error: $e');
     }
   }
-
-
 
   Future<void> _getUserLocation() async {
     final location = Location();
@@ -180,13 +178,15 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                 print('LatLng: $latLng');
                 setState(() {
                   pickupLocation = latLng;
-                  mapController?.animateCamera(CameraUpdate.newLatLngZoom(pickupLocation, 17));
+                  mapController?.animateCamera(
+                      CameraUpdate.newLatLngZoom(pickupLocation, 17));
                   markers.add(
                     Marker(
                       markerId: MarkerId("pickupLocation"),
                       position: pickupLocation,
                       draggable: true,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueGreen),
                       onDragEnd: (value) {
                         setState(() {
                           pickupLocation = value;
@@ -194,11 +194,14 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                       },
                     ),
                   );
+                  if (dropoffLocation.latitude!=0){
+                    _getAndDrawRoute(pickupLocation, dropoffLocation);
+                  }
+
                 });
                 // Perform actions with the selected place and LatLng here
               },
             ),
-
 
             Expanded(
               child: Stack(children: [
@@ -214,17 +217,20 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                       mapController = controller;
                     });
                   },
+                  buildingsEnabled: true,
+                  
                   markers: markers,
                   onCameraMove: (position) {
                     setState(() {
                       pickupLocation = position.target;
-                      if (dropoffLocation.latitude==0){
-                        print(dropoffLocation);
+                      if (dropoffLocation.latitude == 0) {
+                        // print(dropoffLocation);
                         markers.add(
                           Marker(
                             markerId: MarkerId("pickupLocation"),
                             position: position.target,
-                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueGreen),
                             draggable: true,
                             onDragEnd: (value) {
                               setState(() {
@@ -232,22 +238,16 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                               });
                             },
                           ),
-
-                          );
+                        );
                         currentLocation = pickupLocation;
 
                         flag = true;
                       }
-
                     });
                   },
                   myLocationButtonEnabled: true,
 
-
-                  // ... (other GoogleMap properties)
                 ),
-                // CustomMarker(position: pickupLocation),
-                // CustomMarker(position: dropoffLocation),
               ]),
             ),
             SizedBox(
@@ -277,28 +277,18 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                       },
                     ),
                   );
-                  mapController?.animateCamera(CameraUpdate.newLatLngZoom(dropoffLocation, 14));
+                  mapController?.animateCamera(
+                      CameraUpdate.newLatLngZoom(dropoffLocation, 14));
                   // _drawRoute();
                   currentLocationDescription = description;
-                  _getAndDrawRoute(pickupLocation, dropoffLocation);
+                  // _getAndDrawRoute(pickupLocation, dropoffLocation);
+                  if (pickupLocation.latitude!=0){
+                    _getAndDrawRoute(pickupLocation, dropoffLocation);
+                  }
                 });
                 // Perform actions with the selected place and LatLng here
               },
             ),
-            // Drop-off Location Text Field
-            // TextField(
-            //   onChanged: (value) {
-            //     setState(() {
-            //       // dropOffLocation = value;
-            //     });
-            //   },
-            //   decoration: InputDecoration(
-            //     hintText: 'Enter drop-off location',
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(30),
-            //     ),
-            //   ),
-            // ),
             SizedBox(height: 16),
 
             // Vehicle Type Text
@@ -395,12 +385,18 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
             SizedBox(height: 10),
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            _submitRideRequest();
-          },
-          label: Text("Request Ride"),
+        floatingActionButton: FloatingActionButton.large(onPressed: () {
+
+        },
+
+          child: IconButton(icon: const Icon(Icons.rocket_launch), iconSize: 60, splashRadius: 48, onPressed: () {  },) //Text("Request Ride", style: TextStyle(fontSize: 22),),
         ));
+        // FloatingActionButton.extended(
+        //   onPressed: () {
+        //     _submitRideRequest();
+        //   },
+        //   label: Text("Request Ride"),
+        // ));
   }
 
   void updatePickupLocation(LatLng newLocation) {
@@ -425,7 +421,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
               },
               child: Text('Cancel'),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -446,11 +442,16 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
     print('Sharing Location: $isSharingLocation');
   }
 
-  Future<void> _getAndDrawRoute(LatLng originPlace, LatLng destinationPlace) async {
+  Future<void> _getAndDrawRoute(
+      LatLng originPlace, LatLng destinationPlace) async {
     final directionsResponse = await directions.directions(
-      directionspkg.Location(lat: originPlace.latitude, lng: originPlace.longitude), // Origin
-      directionspkg.Location(lat: destinationPlace.latitude, lng: destinationPlace.longitude), // Destination
+      directionspkg.Location(
+          lat: originPlace.latitude, lng: originPlace.longitude), // Origin
+      directionspkg.Location(
+          lat: destinationPlace.latitude,
+          lng: destinationPlace.longitude), // Destination
       travelMode: directionspkg.TravelMode.driving, // Travel mode
+      // trafficModel: directionspkg.TrafficModel.bestGuess,
     );
 
     if (directionsResponse.isOkay) {
@@ -461,10 +462,13 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
       for (final leg in route.legs) {
         for (final step in leg.steps) {
           final encodedPolyline = step.polyline.points;
-          final List<PointLatLng> decoded = PolylinePoints().decodePolyline(encodedPolyline);
+          final List<PointLatLng> decoded =
+              PolylinePoints().decodePolyline(encodedPolyline);
 
           // Convert PointLatLng to LatLng
-          final List<LatLng> latLngPoints = decoded.map((point) => LatLng(point.latitude, point.longitude)).toList();
+          final List<LatLng> latLngPoints = decoded
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
           polylinePoints.addAll(latLngPoints);
         }
       }
@@ -484,33 +488,6 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
       print('Directions API error: ${directionsResponse.errorMessage}');
     }
   }
-
-
-
-  // void _getPolyline() async {
-  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //     "your_api_key_here", // Replace with your Google Maps API key
-  //     PointLatLng(origin.latitude, origin.longitude),
-  //     PointLatLng(destination.latitude, destination.longitude),
-  //     travelMode: TravelMode.driving,
-  //   );
-  //
-  //   if (result.points.isNotEmpty) {
-  //     result.points.forEach((PointLatLng point) {
-  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     });
-  //   }
-  //
-  //   setState(() {
-  //     Polyline polyline = Polyline(
-  //       polylineId: PolylineId("poly"),
-  //       color: Colors.blue,
-  //       points: polylineCoordinates,
-  //       width: 3,
-  //     );
-  //     polylines.add(polyline);
-  //   });
-  // }
 
 
   void _drawRoute() {

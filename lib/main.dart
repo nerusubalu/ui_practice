@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ride App',
-      theme: _buildShrineTheme(),
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
-      //   useMaterial3: true,
-      // ),
+      // theme: _buildShrineTheme(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
       home: FutureBuilder<bool>(
         future: _checkLoginStatus(),
