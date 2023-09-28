@@ -7,6 +7,7 @@ import 'package:ui_practice/user_profile_screen.dart';
 import 'package:ui_practice/custom_drawer.dart';
 import 'package:google_maps_webservice/directions.dart' as directionspkg;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:ui_practice/vehicles.dart';
 
 final directions = directionspkg.GoogleMapsDirections(
     apiKey: 'AIzaSyBKCOVTBJuaYswfKPs0I8WbQxhb_1eKHS8');
@@ -83,7 +84,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
   }
 
   Location location = Location();
-  String currentLocationDescription = "Search Location";
+  String currentLocationDescription = "Search Destination";
 
   Future<void> getLocationDescription(LatLng location) async {
     try {
@@ -140,6 +141,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Ride Request'),
+          centerTitle: false,
           actions: [
             GestureDetector(
               onTap: () {
@@ -154,7 +156,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                 child: Padding(
                   padding: EdgeInsets.all(7),
                   child: CircleAvatar(
-                    radius: 20,
+                    radius: 17,
                     backgroundImage: NetworkImage(user.profileImageUrl),
                   ),
                 ),
@@ -165,11 +167,6 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
         drawer: MyDrawer(),
         body: Column(
           children: [
-            SizedBox(height: 16),
-            Text(
-              'Pick-up Location',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
             LocationSearchWidget(
               googleApiKey: 'AIzaSyC_fTRYkMSyaBZTxS7CkE2P-WLVs-craq0',
               location: "Your Current Location",
@@ -194,69 +191,71 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                       },
                     ),
                   );
-                  if (dropoffLocation.latitude!=0){
+                  if (dropoffLocation.latitude != 0) {
                     _getAndDrawRoute(pickupLocation, dropoffLocation);
                   }
-
                 });
                 // Perform actions with the selected place and LatLng here
               },
             ),
-
             Expanded(
               child: Stack(children: [
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target:
-                        pickupLocation, // Use currentLocation as the initial camera position
-                    zoom: 14.0,
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 400,
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target:
+                          pickupLocation, // Use currentLocation as the initial camera position
+                      zoom: 14.0,
+                    ),
+                    polylines: polylines,
+                    onMapCreated: (controller) {
+                      setState(() {
+                        mapController = controller;
+                      });
+                    },
+                    buildingsEnabled: true,
+                    markers: markers,
+                    onCameraMove: (position) {
+                      setState(() {
+                        pickupLocation = position.target;
+                        if (dropoffLocation.latitude == 0) {
+                          // print(dropoffLocation);
+                          markers.add(
+                            Marker(
+                              markerId: MarkerId("pickupLocation"),
+                              position: position.target,
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueGreen),
+                              draggable: true,
+                              onDragEnd: (value) {
+                                setState(() {
+                                  pickupLocation = value;
+                                });
+                              },
+                            ),
+                          );
+                          currentLocation = pickupLocation;
+
+                          flag = true;
+                        }
+                      });
+                    },
+                    myLocationButtonEnabled: true,
                   ),
-                  polylines: polylines,
-                  onMapCreated: (controller) {
-                    setState(() {
-                      mapController = controller;
-                    });
-                  },
-                  buildingsEnabled: true,
-                  
-                  markers: markers,
-                  onCameraMove: (position) {
-                    setState(() {
-                      pickupLocation = position.target;
-                      if (dropoffLocation.latitude == 0) {
-                        // print(dropoffLocation);
-                        markers.add(
-                          Marker(
-                            markerId: MarkerId("pickupLocation"),
-                            position: position.target,
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                                BitmapDescriptor.hueGreen),
-                            draggable: true,
-                            onDragEnd: (value) {
-                              setState(() {
-                                pickupLocation = value;
-                              });
-                            },
-                          ),
-                        );
-                        currentLocation = pickupLocation;
-
-                        flag = true;
-                      }
-                    });
-                  },
-                  myLocationButtonEnabled: true,
-
                 ),
               ]),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Drop-off Location',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // Text(
+            //   'Drop-off Location',
+            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ),
             LocationSearchWidget(
               googleApiKey: 'AIzaSyC_fTRYkMSyaBZTxS7CkE2P-WLVs-craq0',
               location: currentLocationDescription,
@@ -282,121 +281,33 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                   // _drawRoute();
                   currentLocationDescription = description;
                   // _getAndDrawRoute(pickupLocation, dropoffLocation);
-                  if (pickupLocation.latitude!=0){
+                  if (pickupLocation.latitude != 0) {
                     _getAndDrawRoute(pickupLocation, dropoffLocation);
                   }
                 });
                 // Perform actions with the selected place and LatLng here
               },
             ),
-            SizedBox(height: 16),
+            // SizedBox(height: 16),
 
             // Vehicle Type Text
-            Expanded(
-              child: DraggableScrollableSheet(
-                initialChildSize:
-                    0.3, // Initial size when closed (20% of screen)
-                minChildSize: 0.2, // Minimum size (20% of screen)
-                maxChildSize:
-                    0.9, // Maximum size when fully open (90% of screen)
-                expand: true,
-                builder:
-                    (BuildContext context, ScrollController scrollController) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                      border: Border.all(
-                          color: Colors.black, style: BorderStyle.solid),
-                    ),
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: vehicleOptions.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedVehicleIndex = index;
-                            });
-                            _showConfirmationDialog(
-                                context, vehicleOptions[index]);
-                          },
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.all(7),
-                                child: ImageIcon(
-                                  AssetImage(vehicleOptions[index].iconAsset),
-                                  size: 80,
-                                  color: selectedVehicleIndex == index
-                                      ? Colors.blue // Highlight color
-                                      : Colors.black, // Regular color
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  SizedBox(height: 10),
-                                  Text(
-                                    vehicleOptions[index].name,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color: selectedVehicleIndex == index
-                                          ? Colors.blue // Highlight color
-                                          : Colors.black, // Regular color
-                                    ),
-                                  ),
-                                  Text(
-                                    '\$${vehicleOptions[index].price.toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 16),
-            // Share My Location Checkbox
-            Row(
-              children: [
-                Checkbox(
-                  value: isSharingLocation,
-                  onChanged: (value) {
-                    setState(() {
-                      isSharingLocation = value!;
-                    });
-                  },
-                ),
-                Text('Share My Location'),
-              ],
-            ),
-            SizedBox(height: 10),
+            //
+            VehicleSelectionScreen(),
           ],
         ),
-        floatingActionButton: FloatingActionButton.large(onPressed: () {
-
-        },
-
-          child: IconButton(icon: const Icon(Icons.rocket_launch), iconSize: 60, splashRadius: 48, onPressed: () {  },) //Text("Request Ride", style: TextStyle(fontSize: 22),),
-        ));
-        // FloatingActionButton.extended(
-        //   onPressed: () {
-        //     _submitRideRequest();
-        //   },
-        //   label: Text("Request Ride"),
-        // ));
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              _submitRideRequest();
+            },
+          icon: Icon(Icons.rocket_launch),
+            label: const Text("Ride", style: TextStyle(fontSize: 20),),
+            ));
+    // FloatingActionButton.extended(
+    //   onPressed: () {
+    //     _submitRideRequest();
+    //   },
+    //   label: Text("Request Ride"),
+    // ));
   }
 
   void updatePickupLocation(LatLng newLocation) {
@@ -480,7 +391,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
           polylineId: PolylineId('route'),
           points: polylinePoints,
           color: Colors.black, // Change this to your desired color
-          width: 3, // Change this to your desired width
+          width: 2, // Change this to your desired width
         ));
       });
     } else {
@@ -489,27 +400,6 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
     }
   }
 
-
-  void _drawRoute() {
-    // Check if both pickup and dropoff locations are set
-    if (pickupLocation != null && dropoffLocation != null) {
-      // Define the route's polyline
-      Polyline routePolyline = Polyline(
-        polylineId: PolylineId('route'),
-        color: Colors.blue, // Color of the route
-        width: 5, // Width of the route line
-        points: [
-          pickupLocation!, // Starting point
-          dropoffLocation!, // Ending point
-        ],
-      );
-
-      // Update the polylines set to include the route polyline
-      setState(() {
-        polylines.add(routePolyline);
-      });
-    }
-  }
 }
 
 void main() {

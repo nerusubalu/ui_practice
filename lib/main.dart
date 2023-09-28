@@ -8,6 +8,9 @@ void main() {
   runApp(const MyApp());
 }
 
+Color currentColor = const Color(0xFFcae9ff);
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Ride App',
       // theme: _buildShrineTheme(),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: currentColor),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -76,6 +79,26 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// ColorScheme _colorScheme = ColorScheme.fromSwatch(
+//   primarySwatch: MaterialColor(
+//     _currentColor.value,
+//     <int, Color>{
+//       50: _currentColor,
+//       100: _currentColor,
+//       200: _currentColor,
+//       300: _currentColor,
+//       400: _currentColor,
+//       500: _currentColor,
+//       600: _currentColor,
+//       700: _currentColor,
+//       800: _currentColor,
+//       900: _currentColor,
+//     },
+//   ),
+//   brightness: Brightness.light,
+// );
+
+
 class _MyHomePageState extends State<MyHomePage> {
   var style = ElevatedButton.styleFrom(
       minimumSize: Size(160, 60),
@@ -83,6 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
       elevation: 15,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25))));
+
+
+
 
   @override
   Widget build(BuildContext context) {

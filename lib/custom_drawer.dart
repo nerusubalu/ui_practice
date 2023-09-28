@@ -26,7 +26,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Ride History'),
+            title: Text('Ride History', style: TextStyle(fontSize: 18),),
             onTap: () {
               // Navigate to the Home Screen
               Navigator.push(
@@ -38,7 +38,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Settings', style: TextStyle(fontSize: 18),),
             onTap: () {
               Navigator.push(
                 context,
@@ -50,7 +50,8 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.info),
-            title: Text('About'),
+            title: Text('About', style: TextStyle(fontSize: 18),),
+            subtitle: Text('1.0.0'),
             onTap: () {
               // Navigate to the About Screen or perform any other action
               Navigator.push(
@@ -62,7 +63,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.logout_rounded),
-            title: Text('Logout'),
+            title: Text('Logout', style: TextStyle(fontSize: 18),),
             onTap: () {
               _removeData(false);
               _showConfirmationDialog(context);

@@ -47,7 +47,7 @@ dependencies:
   url_launcher: any
   permission_handler: any
   flutter_polyline_points: any
-
+  flutter_colorpicker: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
