@@ -120,7 +120,7 @@ class _RideViewScreenState extends State<RideViewScreen> {
 
     if (directionsResponse.isOkay) {
       final route = directionsResponse.routes.first;
-      final encodedPolyline = route.overviewPolyline.points;
+      // final encodedPolyline = route.overviewPolyline.points;
       final List<LatLng> polylinePoints = [];
       for (final leg in route.legs) {
         for (final step in leg.steps) {

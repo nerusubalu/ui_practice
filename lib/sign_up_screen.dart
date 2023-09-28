@@ -293,28 +293,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     final response = await http.post(
       Uri.parse(
-          'https://atbcamg9e2.execute-api.us-east-1.amazonaws.com/V1/auth'),
+        'https://qhsx5by37h.execute-api.us-east-1.amazonaws.com/dev/auth'),
       body: body,
       headers: headers,
     );
+    print(response.body);
+    // var data = json.decode(response);
 
-    var data = json.decode(response.body);
-    if (data['statusCode'] == 200) {
-      print(data);
-      bool isAuthenticated = data['body'] != null;
-      if (isAuthenticated) {
+    if (response.statusCode == 200) {
+      // print(data);
+      // bool isAuthenticated = data['body'] == "logged in";
+      // if (isAuthenticated) {
         await _storeData(true);
         // Navigate to the next screen after successful sign-up
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => RideRequestScreen()),
         );
-      } else {
-        // Handle authentication failure
-        print('Authentication failed');
       }
-    } else {
+     else {
       // Handle API call failure
+      print(response.body);
       print('Failed to authenticate');
     }
   }

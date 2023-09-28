@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
+
 }
 
 Color currentColor = const Color(0xFFcae9ff);

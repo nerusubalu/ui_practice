@@ -189,33 +189,50 @@ class _SignInScreenState extends State<SignInScreen> {
 
     final response = await http.post(
       Uri.parse(
-          'https://atbcamg9e2.execute-api.us-east-1.amazonaws.com/V1/auth'),
+          'https://qhsx5by37h.execute-api.us-east-1.amazonaws.com/dev/auth'),
       body: body,
       headers: headers,
     );
-
-    var data = json.decode(response.body);
-    if (data['statusCode'] == 200) {
-      print(data);
-      bool isAuthenticated = data['body'] != null;
-      if (isAuthenticated) {
-        await _storeData(true);
-        // Navigate to the next screen after successful sign-up
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => RideRequestScreen()),
-        );
-        return true;
-      } else {
-        // Handle authentication failure
-        print('Authentication failed');
-        return false;
-      }
-    } else {
+    if (response.statusCode == 200) {
+      // print(data);
+      // bool isAuthenticated = data['body'] == "logged in";
+      // if (isAuthenticated) {
+      await _storeData(true);
+      // Navigate to the next screen after successful sign-up
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => RideRequestScreen()),
+      );
+      return true;
+    }
+    else {
       // Handle API call failure
+      print(response.body);
       print('Failed to authenticate');
       return false;
     }
+    // var data = json.decode(response.body);
+    // if (data['statusCode'] == 200) {
+    //   print(data);
+    //   bool isAuthenticated = data['body'] != null;
+    //   if (isAuthenticated) {
+    //     await _storeData(true);
+    //     // Navigate to the next screen after successful sign-up
+    //     Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => RideRequestScreen()),
+    //     );
+    //     return true;
+    //   } else {
+    //     // Handle authentication failure
+    //     print('Authentication failed');
+    //     return false;
+    //   }
+    // } else {
+    //   // Handle API call failure
+    //   print('Failed to authenticate');
+    //   return false;
+    // }
   }
 
   Future<void> _storeData(bool auth) async {

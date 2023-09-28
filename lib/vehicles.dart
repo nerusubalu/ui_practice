@@ -69,9 +69,36 @@ class _VehicleSelectionScreenState extends State<VehicleSelectionScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _showConfirmationDialog(context, _vehicleOptions[index]);
     });
   }
-
+  void _showConfirmationDialog(
+      BuildContext context, VehicleOption selectedOption) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm Vehicle Selection'),
+          content: Text(
+              'You have selected ${selectedOption.name}. Price: Rs.${selectedOption.price.toStringAsFixed(2)}'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   // Function to show fare details in a BottomSheet
   void _showFareDetails(BuildContext context) {
     showModalBottomSheet<void>(

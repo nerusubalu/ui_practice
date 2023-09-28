@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:ui_practice/location_search.dart';
@@ -8,9 +9,10 @@ import 'package:ui_practice/custom_drawer.dart';
 import 'package:google_maps_webservice/directions.dart' as directionspkg;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:ui_practice/vehicles.dart';
+import 'package:ui_practice/auth/secrets.dart';
 
 final directions = directionspkg.GoogleMapsDirections(
-    apiKey: 'AIzaSyBKCOVTBJuaYswfKPs0I8WbQxhb_1eKHS8');
+    apiKey: apiKey);
 
 class RideRequestScreen extends StatefulWidget {
   @override
@@ -168,7 +170,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
         body: Column(
           children: [
             LocationSearchWidget(
-              googleApiKey: 'AIzaSyC_fTRYkMSyaBZTxS7CkE2P-WLVs-craq0',
+              googleApiKey: apiKey,
               location: "Your Current Location",
               onPlaceSelected: (description, latLng) {
                 print('Selected Place: $description');
@@ -257,7 +259,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
             //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             // ),
             LocationSearchWidget(
-              googleApiKey: 'AIzaSyC_fTRYkMSyaBZTxS7CkE2P-WLVs-craq0',
+              googleApiKey: apiKey,
               location: currentLocationDescription,
               onPlaceSelected: (description, latLng) {
                 print('Selected Place: $description');
@@ -402,7 +404,8 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
 
 }
 
-void main() {
+Future<void> main() async{
+
   runApp(MaterialApp(
     home: RideRequestScreen(),
   ));
